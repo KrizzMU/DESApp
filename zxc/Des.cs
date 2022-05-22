@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 
-namespace zxc
+namespace DesApp
 {
-    class Des 
+    sealed class Des : Permutation
     {
         private string input;
         private string dInput = "";
@@ -18,179 +18,108 @@ namespace zxc
             {
                 input += " ";
             }
-            int n = input.Length / 8;
-            inputMas = new String[n];
-            for (int i = 0; i < n; i++) // заполняю блоки
-            {
+            int nBox = input.Length / 8; // количество блоков
+            inputMas = new String[nBox];
+            for (int i = 0; i < nBox; i++) // заполняю массив блоков
+            {                
                 inputMas[i] = input.Substring(0, 8);
                 input = input.Remove(0, 8);                
             }
-            for (int j = 0; j < n; j++) // каждый блок в двоичную систему
-            {
-                dInput = "";
-                byte[] a = Encoding.GetEncoding(1251).GetBytes(inputMas[j]);
-
-                for (int i = 0; i < 8; i++)
-                {
-                    string binary = Convert.ToString(a[i], 2);                    
-                    while (binary.Length != 8)
-                    {
-                        binary = "0" + binary;                       
-                    }
-
-                    dInput += binary;
-                }
-                inputMas[j] = dInput;  
-            }
-            for (int j = 0; j < 8; j++) // ключ в двоичную
-            {
-                byte[] a = Encoding.GetEncoding(1251).GetBytes(key);
-                string dd = "";
-                for (int i = 0; i < 8; i++)
-                {
-                    string binary = Convert.ToString(a[i], 2);
-                    while (binary.Length != 8)
-                    {
-                        binary = "0" + binary;
-                    }
-
-                    dd += binary;
-                }
-                dKey += dd;               
-            }
-
-
+            for (int j = 0; j < nBox; j++) // каждый блок в двоич.
+            {                              
+                inputMas[j] = toBynaryFirst(inputMas[j]);   
+            }           
+            dKey += toBynaryFirst(key); // ключ в двоич.                          
         }
-        public string Encription()
+        private string toBynaryFirst(string str)
         {
-            string ex = "";
+            byte[] a = Encoding.GetEncoding(1251).GetBytes(str); // перекадировка строки в win-1251
+            string fByn = "";
+            for (int i = 0; i < 8; i++)
+            {
+                string binary = Convert.ToString(a[i], 2);
+                while (binary.Length != 8)
+                {
+                    binary = "0" + binary;
+                }
+                fByn += binary;
+            }
+            return fByn;
+        }
+        public string Encription() //блок шифрование
+        {
+            string en = "";
             for (int t = 0; t < inputMas.Length; t++)
             {
-                dInput = inputMas[t];
-                dInput = IPer(dInput);
+                dInput = inputMas[t];                
+                dInput = Permut(dInput, Pi);
                 string LdInput = dInput.Substring(0, 32);
                 string RdInput = dInput.Remove(0, 32);
-                string[] KeysMassive = keyExp(dKey);
-                for (int i = 0; i < 16; i++)
+                string[] KeysMassive = keyExp(dKey); // получение ключей
+                for (int i = 0; i < 16; i++) //сам алгоритм
                 {
-                    string y = RdInput;
-                    RdInput = XOR(Feishtel(RdInput, KeysMassive[i]), LdInput);
-                    LdInput = y;
+                    string buf = RdInput;
+                    RdInput = XOR(Feishtel(RdInput, KeysMassive[i]), LdInput); 
+                    LdInput = buf;
                 }
-                dInput = RdInput + LdInput;
-                string h = "";
-                for (int i = 0; i < 64; i++)
-                {
-                    h += dInput[Permutation.Fp[i]-1];                    
-                }
-                dInput = h;                
-                dInput = StringFromBinaryToNormalFormat(dInput);
-                inputMas[t] = dInput;
-                ex += dInput;
+                dInput = RdInput + LdInput; // в конце левая и правая часть не меняются                
+                dInput = Permut(dInput, Fp);
+                dInput = StringFromBinaryToNormalFormat(dInput);                
+                en += dInput;
             }
-
-            return ex;
+            return en;
         }
-
-        public string Dencription()
+        public string Dencription() //блок расшифровки
         {
-            string ex = "";
+            string den = "";
             for (int t = 0; t < inputMas.Length-1; t++)
             {
-                dInput = inputMas[t];
-                string h = "";
-                for (int i = 1; i < 65; i++)
-                {
-                    h += dInput[Array.IndexOf(Permutation.Fp, i)];
-                }
-                dInput = h;
+                dInput = inputMas[t];                
+                dInput = Depermut(dInput, Fp);
                 string RdInput = dInput.Substring(0, 32);
                 string LdInput = dInput.Remove(0, 32);
                 string[] KeysMassive = keyExp(dKey);
                 for (int i = 15; i >= 0; i--)
                 {
-                    string y = RdInput;
+                    string buf = RdInput;
                     RdInput = LdInput;
-                    LdInput = XOR(Feishtel(RdInput, KeysMassive[i]), y);
+                    LdInput = XOR(Feishtel(RdInput, KeysMassive[i]), buf);
                 }
-                dInput = LdInput + RdInput;
-
-                h = "";
-                for (int i = 1; i < 65; i++)
-                {
-                    h += dInput[Array.IndexOf(Permutation.Pi, i)];
-                }
-                dInput = h;
+                dInput = LdInput + RdInput;               
+                dInput = Depermut(dInput, Pi);
                 dInput = StringFromBinaryToNormalFormat(dInput);
-                ex += dInput;
-                inputMas[t] = dInput;
+                den += dInput;                
             }
-            return ex;
+            return den;
         }
-
-        private string IPer(string s)
+        private string Depermut(string str, int[] p) // обратная перестановка
         {
             string newInput = "";
-            for (int i = 0; i < 64; i++)
+            for (int i = 1; i < 65; i++)
             {
-                newInput += s[Permutation.Pi[i]-1];                
-            }
-
-            return newInput;
-        }
-        private string Eper(string s)
-        {
-            string newInput = "";
-            for (int i = 0; i < 48; i++)
-            {
-                newInput += s[Permutation.Ep[i]-1];                
+                newInput += str[Array.IndexOf(p, i)];
             }
             return newInput;
         }
-        private string Pper(string s)
+        private string Permut(string str, int[] p)
         {
-            string newInput = "";
-            for (int i = 0; i < 32; i++)
+            string newInput="";
+            for (int i = 0; i < p.Length; i++)
             {
-                newInput += s[Permutation.Pp[i]-1];                
+                newInput += str[p[i] - 1]; 
             }
             return newInput;
-        }
-        private string Displacement(string a, int shift)
-        {
-            for (int i = 0; i < shift; i++)
-            {
-                a = a[a.Length - 1] + a;
-                a = a.Remove(a.Length - 1);
-            }
-            return a;
-        }
-        private string ADisplacement(string a, int shift)
-        {
-            for (int i = 0; i < shift; i++)
-            {
-                a = a + a[0];
-                a = a.Remove(0, 1);
-            }
-            return a;
-        }
+        }       
         private string StringFromBinaryToNormalFormat(string input)
         {
             string output = "";
             while (input.Length > 0)
             {
-                string char_binary = input.Substring(0, 8);
-                input = input.Remove(0, 8);                
-                int a = 0;
-                int degree = char_binary.Length - 1;
-
-                foreach (char c in char_binary)
-                {
-                    a += Convert.ToInt32(Convert.ToString(c)) * (int)Math.Pow(2, degree);
-                    degree--;
-                }
-                byte[] aa = { (byte)a };
-                output += Encoding.GetEncoding(1251).GetString(aa);
+                string charBinary = input.Substring(0, 8);
+                input = input.Remove(0, 8);                                               
+                int a = BinaryToDecimal(charBinary);
+                byte[] ans = { (byte)a };
+                output += Encoding.GetEncoding(1251).GetString(ans);
             }
             return output;
         }
@@ -206,23 +135,22 @@ namespace zxc
                 }
                 exponent++;
             }
-
             return result;
         }
         private string Feishtel(string input, string Key)
-        {
-            input = Eper(input);
-            string xor = XOR(input, Key);
+        {            
+            input = Permut(input, Ep);
+            string xorstr = XOR(input, Key);
             string h = "";
             string[] S = new String[8];
             for (int i = 0; i < 8; i++)
             {
-                S[i] = xor.Substring(0, 6);
-                xor = xor.Remove(0, 6);
+                S[i] = xorstr.Substring(0, 6);
+                xorstr = xorstr.Remove(0, 6);
                 S[i] = sBox(S[i], i);
                 h += S[i];
             }
-            h = Pper(h);
+            h = Permut(h, Dp);          
             return h;
         }
         private string sBox(string e, int i)
@@ -233,7 +161,7 @@ namespace zxc
             e = e.Remove(e.Length - 1);            
             int a = BinaryToDecimal(pp);
             int b = BinaryToDecimal(e);
-            int c = Permutation.S[i, a, b];
+            int c = S[i, a, b];
             e = Convert.ToString(c, 2);
             while (e.Length != 4)
             {
@@ -248,7 +176,6 @@ namespace zxc
             {
                 bool a = Convert.ToBoolean(Convert.ToInt32(s1[i].ToString()));
                 bool b = Convert.ToBoolean(Convert.ToInt32(s2[i].ToString()));
-
                 if (a ^ b)
                     result += "1";
                 else
@@ -262,8 +189,8 @@ namespace zxc
             string k1 = "", k2 = "";
             for (int i = 0; i < 28; i++)
             {
-                k1 += Key[Permutation.Pkey1[i]-1];
-                k2 += Key[Permutation.Pkey2[i]-1];                
+                k1 += Key[Pkey1[i]-1];
+                k2 += Key[Pkey2[i]-1];                
             }
 
             for (int i = 0; i < 16; i++)
@@ -282,11 +209,20 @@ namespace zxc
                 string kk = "";
                 for (int j = 0; j < 48; j++)
                 {                    
-                    kk += KeyMas[i][Permutation.Cp[j]-1];
+                    kk += KeyMas[i][Cp[j]-1];
                 }
                 KeyMas[i] = kk;
             }
             return KeyMas;
+        }
+        private string ADisplacement(string a, int shift)
+        {
+            for (int i = 0; i < shift; i++)
+            {
+                a = a + a[0];
+                a = a.Remove(0, 1);
+            }
+            return a;
         }
     }
 }

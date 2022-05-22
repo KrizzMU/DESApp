@@ -1,5 +1,5 @@
 ﻿
-namespace zxc
+namespace DesApp
 {
     partial class Form1
     {
@@ -7,7 +7,6 @@ namespace zxc
         /// Обязательная переменная конструктора.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
         /// <summary>
         /// Освободить все используемые ресурсы.
         /// </summary>
@@ -18,8 +17,8 @@ namespace zxc
             {
                 components.Dispose();
             }
-            base.Dispose(disposing);
-        }
+            base.Dispose(disposing);               
+        }        
 
         #region Код, автоматически созданный конструктором форм Windows
 
@@ -35,11 +34,15 @@ namespace zxc
             this.openFile = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.Encryption = new System.Windows.Forms.Button();
-            this.Decryptiom = new System.Windows.Forms.Button();
+            this.Decryption = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.Source = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.label5 = new System.Windows.Forms.Label();
+            this.bErr = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -51,26 +54,26 @@ namespace zxc
             this.label1.Size = new System.Drawing.Size(141, 24);
             this.label1.TabIndex = 0;
             this.label1.Text = "Введите ключ:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBox1
             // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.Window;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textBox1.Location = new System.Drawing.Point(266, 48);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(171, 27);
             this.textBox1.TabIndex = 1;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // openFile
             // 
-            this.openFile.Location = new System.Drawing.Point(354, 190);
+            this.openFile.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.openFile.Location = new System.Drawing.Point(354, 183);
             this.openFile.Name = "openFile";
             this.openFile.Size = new System.Drawing.Size(62, 32);
             this.openFile.TabIndex = 4;
             this.openFile.Text = "обзор";
-            this.openFile.UseVisualStyleBackColor = true;
-            this.openFile.Click += new System.EventHandler(this.button1_Click);
+            this.openFile.UseVisualStyleBackColor = false;
+            this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
             // openFileDialog1
             // 
@@ -78,31 +81,33 @@ namespace zxc
             // 
             // Encryption
             // 
+            this.Encryption.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.Encryption.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Encryption.Location = new System.Drawing.Point(33, 272);
             this.Encryption.Name = "Encryption";
             this.Encryption.Size = new System.Drawing.Size(137, 56);
             this.Encryption.TabIndex = 5;
             this.Encryption.Text = "Зашифровать";
-            this.Encryption.UseVisualStyleBackColor = true;
+            this.Encryption.UseVisualStyleBackColor = false;
             this.Encryption.Click += new System.EventHandler(this.Encryption_Click);
             // 
-            // Decryptiom
+            // Decryption
             // 
-            this.Decryptiom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Decryptiom.Location = new System.Drawing.Point(300, 272);
-            this.Decryptiom.Name = "Decryptiom";
-            this.Decryptiom.Size = new System.Drawing.Size(137, 56);
-            this.Decryptiom.TabIndex = 6;
-            this.Decryptiom.Text = "Расшифровать";
-            this.Decryptiom.UseVisualStyleBackColor = true;
-            this.Decryptiom.Click += new System.EventHandler(this.button3_Click);
+            this.Decryption.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.Decryption.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Decryption.Location = new System.Drawing.Point(300, 272);
+            this.Decryption.Name = "Decryption";
+            this.Decryption.Size = new System.Drawing.Size(137, 56);
+            this.Decryption.TabIndex = 6;
+            this.Decryption.Text = "Расшифровать";
+            this.Decryption.UseVisualStyleBackColor = false;
+            this.Decryption.Click += new System.EventHandler(this.Decryption_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(29, 130);
+            this.label2.Location = new System.Drawing.Point(29, 116);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(251, 24);
             this.label2.TabIndex = 7;
@@ -119,40 +124,72 @@ namespace zxc
             // 
             // Source
             // 
-            this.Source.Location = new System.Drawing.Point(33, 197);
+            this.Source.BackColor = System.Drawing.SystemColors.Window;
+            this.Source.Location = new System.Drawing.Point(33, 190);
             this.Source.Name = "Source";
             this.Source.Size = new System.Drawing.Size(315, 20);
             this.Source.TabIndex = 9;
-            this.Source.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(30, 179);
+            this.label4.Location = new System.Drawing.Point(30, 163);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 15);
             this.label4.TabIndex = 10;
             this.label4.Text = "Путь:";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(33, 236);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(181, 17);
+            this.checkBox1.TabIndex = 11;
+            this.checkBox1.Text = "Открыть файл по завершению";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(0, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(100, 23);
+            this.label5.TabIndex = 0;
+            // 
+            // bErr
+            // 
+            this.bErr.AutoSize = true;
+            this.bErr.ForeColor = System.Drawing.Color.DarkRed;
+            this.bErr.Location = new System.Drawing.Point(33, 217);
+            this.bErr.Name = "bErr";
+            this.bErr.Size = new System.Drawing.Size(0, 13);
+            this.bErr.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(481, 356);
+            this.Controls.Add(this.bErr);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.Source);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.Decryptiom);
+            this.Controls.Add(this.Decryption);
             this.Controls.Add(this.Encryption);
             this.Controls.Add(this.openFile);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(497, 395);
+            this.MinimumSize = new System.Drawing.Size(497, 395);
             this.Name = "Form1";
-            this.Text = "DESAl";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Text = "DES";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -165,11 +202,15 @@ namespace zxc
         private System.Windows.Forms.Button openFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button Encryption;
-        private System.Windows.Forms.Button Decryptiom;
+        private System.Windows.Forms.Button Decryption;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox Source;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label bErr;
     }
 }
 

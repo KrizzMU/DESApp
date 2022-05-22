@@ -7,7 +7,7 @@
     <ProjectGuid>{C1AB5FC0-88C1-4E86-927E-5B4C6F777895}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>zxc</RootNamespace>
-    <AssemblyName>zxc</AssemblyName>
+    <AssemblyName>DesAlgorithm</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />

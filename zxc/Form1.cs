@@ -10,105 +10,121 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace zxc
+namespace DesApp
 {
     public partial class Form1 : Form
     {
         public Form1()
         {
-            InitializeComponent();
-            openFileDialog1.Filter = "Text files(*.txt)|*.txt";
+            InitializeComponent();            
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void openFile_Click(object sender, EventArgs e)
         {
+            var openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Title = "Выберете файл";
+            openFileDialog1.InitialDirectory = @"C:\";
+            openFileDialog1.Filter = "Text files(*.txt)|*.txt";
             if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
                 return;
-            string filename = openFileDialog1.FileName;
-            Source.Text = filename;
-            
+            string filename = openFileDialog1.FileName;            
+            Source.Text = filename;           
         }
-
-        
-
-        private void button3_Click(object sender, EventArgs e)
+        private bool Err()
         {
-            if (textBox1.Text.ToString().Length != 8)
-            {
-                string err = "Ключ должен быть 8-ми символьный!";
-                label3.Text = err;
-            }
+            bool t = true;
+            label3.Text = "";
+            bErr.Text = "";
+            if (textBox1.Text.ToString().Length != 8) { label3.Text = "Ключ должен быть 8-ми символьный!"; t = false; }
+            if (Source.Text == "") { bErr.Text = "Выберете путь!"; t = false; }
             else
             {
-                label3.Text = "";
-                MessageBox.Show("Выберете файл, в который будет сохранено расшифрованное сообщение.");
-                if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                    return;
-                string filename = openFileDialog1.FileName;
+                try
+                {
+                    string input = Source.Text.Replace(@"\", @"\\");
+                    StreamReader writein = new StreamReader(input);
+                    string a = writein.ReadToEnd();
+                }
+                catch
+                {
+                    bErr.Text = "Неверный путь!";
+                    t = false;
+                }
+            }
+            return t;
+        }
+        private string Proc(char i)
+        {
+            MessageBox.Show("Выберете путь, для сохранения сообщения");
+            var diag = new FolderBrowserDialog();
+            diag.RootFolder = Environment.SpecialFolder.Desktop;
+            string filename = "";
+            string name;
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                filename = diag.SelectedPath + @"\";
                 filename = filename.Replace(@"\", @"\\");
+                if (i == 'd')
+                {
+                    name = Path.GetFileName(Source.Text).Remove(Path.GetFileName(Source.Text).LastIndexOf('.'), 4) + "_De.txt";
+                }
+                else
+                {
+                    name = Path.GetFileName(Source.Text).Remove(Path.GetFileName(Source.Text).LastIndexOf('.'), 4) + "_En.txt";
+                }
+                filename += name;
+            }
+            else  return "-1"; 
+            return filename;
+        }
+        private void Decryption_Click(object sender, EventArgs e)
+        {
+            bool f = Err();
+            if(f)
+            {
+                string filename = Proc('d');
+                if (filename == "-1") return;
                 string input = Source.Text.Replace(@"\", @"\\");
                 StreamWriter write = new StreamWriter(filename);
                 StreamReader writein = new StreamReader(input);
                 string a = writein.ReadToEnd();
                 Des des = new Des(a, textBox1.Text);
                 a = des.Dencription();
+                Clipboard.SetText(a); // копирование в буфер
                 write.WriteLine(a);
                 write.Close();
                 writein.Close();
-                Process proc = Process.Start("notepad.exe", filename);
-                proc.WaitForExit();
-                proc.Close();
+                if(checkBox1.Checked) //открытие файла
+                {
+                    Process proc = Process.Start("notepad.exe", filename);
+                    proc.WaitForExit();
+                    proc.Close();
+                }
             }
         }
-
         private void Encryption_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text.ToString().Length != 8)
+            bool f = Err();
+            if (f)
             {
-                string err = "Ключ должен быть 8-ми символьный!";
-                label3.Text = err;
-            }
-            else
-            {
-                label3.Text = "";
-                MessageBox.Show("Выберете файл, в который будет сохранено зашифрованное сообщение.");
-                if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                    return;
-                string filename = openFileDialog1.FileName;
-                filename = filename.Replace(@"\", @"\\");
-                string input = Source.Text.Replace(@"\", @"\\");               
+                string filename = Proc('e');
+                if (filename == "-1") return;
+                string input = Source.Text.Replace(@"\", @"\\");
                 StreamWriter write = new StreamWriter(filename);
                 StreamReader writein = new StreamReader(input);
                 string a = writein.ReadToEnd();
                 Des des = new Des(a, textBox1.Text);
                 a = des.Encription();
+                Clipboard.SetText(a);
                 write.WriteLine(a);
                 write.Close();
                 writein.Close();
-                Process proc = Process.Start("notepad.exe", filename);
-                proc.WaitForExit();
-                proc.Close();
+                if (checkBox1.Checked)
+                {
+                    Process proc = Process.Start("notepad.exe", filename);
+                    proc.WaitForExit();
+                    proc.Close();
+                }                
             }
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        }        
     }
 }
