@@ -16,18 +16,19 @@ namespace DesApp
     {
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
         private void openFile_Click(object sender, EventArgs e)
         {
-            var openFileDialog1 = new OpenFileDialog();
+            var openFileDialog1 = new OpenFileDialog(); //экземпляр класса, выбрать файл
             openFileDialog1.Title = "Выберете файл";
-            openFileDialog1.InitialDirectory = @"C:\";
-            openFileDialog1.Filter = "Text files(*.txt)|*.txt";
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+            openFileDialog1.InitialDirectory = @"C:\"; // нач. папка
+            openFileDialog1.Filter = "Text files(*.txt)|*.txt"; //фильтра имен файлов расширений
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel) 
                 return;
             string filename = openFileDialog1.FileName;            
-            Source.Text = filename;           
+            Source.Text = filename;
+            openFileDialog1.Dispose();
         }
         private bool Err()
         {
@@ -41,7 +42,7 @@ namespace DesApp
                 try
                 {
                     string input = Source.Text.Replace(@"\", @"\\");
-                    StreamReader writein = new StreamReader(input);
+                    StreamReader writein = new StreamReader(input);                    
                     string a = writein.ReadToEnd();
                 }
                 catch
@@ -55,8 +56,7 @@ namespace DesApp
         private string Proc(char i)
         {
             MessageBox.Show("Выберете путь, для сохранения сообщения");
-            var diag = new FolderBrowserDialog();
-            diag.RootFolder = Environment.SpecialFolder.Desktop;
+            var diag = new FolderBrowserDialog();            
             string filename = "";
             string name;
             if (diag.ShowDialog() == DialogResult.OK)
@@ -77,9 +77,8 @@ namespace DesApp
             return filename;
         }
         private void Decryption_Click(object sender, EventArgs e)
-        {
-            bool f = Err();
-            if(f)
+        {            
+            if(Err())
             {
                 string filename = Proc('d');
                 if (filename == "-1") return;
@@ -90,14 +89,14 @@ namespace DesApp
                 Des des = new Des(a, textBox1.Text);
                 a = des.Dencription();
                 Clipboard.SetText(a); // копирование в буфер
-                write.WriteLine(a);
-                write.Close();
+                write.Write(a);
+                write.Close(); //закрывает текущий объект и базовый поток. освобождает все ресурсы
                 writein.Close();
-                if(checkBox1.Checked) //открытие файла
+                if(openOrClose.Checked) //открытие файла
                 {
-                    Process proc = Process.Start("notepad.exe", filename);
-                    proc.WaitForExit();
-                    proc.Close();
+                    Process proc = Process.Start("notepad.exe", filename); //Запускает ресурс процесса и связывает его с компонентом Process 
+                    proc.WaitForExit(); //команду ожидания завершения связанного процесса
+                    proc.Close(); 
                 }
             }
         }
@@ -115,16 +114,17 @@ namespace DesApp
                 Des des = new Des(a, textBox1.Text);
                 a = des.Encription();
                 Clipboard.SetText(a);
-                write.WriteLine(a);
+                write.Write(a);
                 write.Close();
                 writein.Close();
-                if (checkBox1.Checked)
+                if (openOrClose.Checked)
                 {
                     Process proc = Process.Start("notepad.exe", filename);
                     proc.WaitForExit();
                     proc.Close();
                 }                
             }
-        }        
+        }
+        
     }
 }

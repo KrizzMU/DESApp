@@ -27,7 +27,7 @@ namespace DesApp
             }
             for (int j = 0; j < nBox; j++) // каждый блок в двоич.
             {                              
-                inputMas[j] = toBynaryFirst(inputMas[j]);   
+                inputMas[j] = toBynaryFirst(inputMas[j]);
             }           
             dKey += toBynaryFirst(key); // ключ в двоич.                          
         }
@@ -72,7 +72,7 @@ namespace DesApp
         public string Dencription() //блок расшифровки
         {
             string den = "";
-            for (int t = 0; t < inputMas.Length-1; t++)
+            for (int t = 0; t < inputMas.Length; t++)
             {
                 dInput = inputMas[t];                
                 dInput = Depermut(dInput, Fp);
@@ -103,7 +103,7 @@ namespace DesApp
         }
         private string Permut(string str, int[] p)
         {
-            string newInput="";
+            string newInput = "";
             for (int i = 0; i < p.Length; i++)
             {
                 newInput += str[p[i] - 1]; 
@@ -204,7 +204,7 @@ namespace DesApp
                 {
                     k1 = ADisplacement(k1, 2);
                     k2 = ADisplacement(k2, 2);
-                }                
+                }
                 KeyMas[i] = k1 + k2;                
                 string kk = "";
                 for (int j = 0; j < 48; j++)

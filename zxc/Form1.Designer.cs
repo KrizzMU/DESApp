@@ -6,18 +6,18 @@ namespace DesApp
         /// <summary>
         /// Обязательная переменная конструктора.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer components = null; // экземпляр интерфейса, показывающий есть ли посторонии компоненты интерфейса
         /// <summary>
         /// Освободить все используемые ресурсы.
         /// </summary>
         /// <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
-        protected override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing) // Освобождает все ресурсы, занятые модулем component.
         {
             if (disposing && (components != null))
             {
-                components.Dispose();
+                components.Dispose(); // удаляет, высвобождает или сбрасывает неуправляемые ресурсы.
             }
-            base.Dispose(disposing);               
+            base.Dispose(disposing);
         }        
 
         #region Код, автоматически созданный конструктором форм Windows
@@ -28,7 +28,7 @@ namespace DesApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1)); // Обеспечивает простые функциональные возможности для перечисления ресурсов компонента или объекта.
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.openFile = new System.Windows.Forms.Button();
@@ -39,11 +39,11 @@ namespace DesApp
             this.label3 = new System.Windows.Forms.Label();
             this.Source = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.openOrClose = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label5 = new System.Windows.Forms.Label();
             this.bErr = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            this.SuspendLayout(); // приостанавливает логику макета, пока все элемнты не построются
             // 
             // label1
             // 
@@ -67,7 +67,7 @@ namespace DesApp
             // openFile
             // 
             this.openFile.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.openFile.Location = new System.Drawing.Point(354, 183);
+            this.openFile.Location = new System.Drawing.Point(375, 183);
             this.openFile.Name = "openFile";
             this.openFile.Size = new System.Drawing.Size(62, 32);
             this.openFile.TabIndex = 4;
@@ -127,7 +127,7 @@ namespace DesApp
             this.Source.BackColor = System.Drawing.SystemColors.Window;
             this.Source.Location = new System.Drawing.Point(33, 190);
             this.Source.Name = "Source";
-            this.Source.Size = new System.Drawing.Size(315, 20);
+            this.Source.Size = new System.Drawing.Size(336, 20);
             this.Source.TabIndex = 9;
             // 
             // label4
@@ -140,15 +140,15 @@ namespace DesApp
             this.label4.TabIndex = 10;
             this.label4.Text = "Путь:";
             // 
-            // checkBox1
+            // openOrClose
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(33, 236);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(181, 17);
-            this.checkBox1.TabIndex = 11;
-            this.checkBox1.Text = "Открыть файл по завершению";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.openOrClose.AutoSize = true;
+            this.openOrClose.Location = new System.Drawing.Point(33, 236);
+            this.openOrClose.Name = "openOrClose";
+            this.openOrClose.Size = new System.Drawing.Size(181, 17);
+            this.openOrClose.TabIndex = 11;
+            this.openOrClose.Text = "Открыть файл по завершению";
+            this.openOrClose.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -172,10 +172,10 @@ namespace DesApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.ClientSize = new System.Drawing.Size(481, 356);
+            this.ClientSize = new System.Drawing.Size(462, 356);
             this.Controls.Add(this.bErr);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.openOrClose);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.Source);
             this.Controls.Add(this.label3);
@@ -186,12 +186,12 @@ namespace DesApp
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(497, 395);
-            this.MinimumSize = new System.Drawing.Size(497, 395);
+            this.MaximumSize = new System.Drawing.Size(478, 395);
+            this.MinimumSize = new System.Drawing.Size(478, 395);
             this.Name = "Form1";
             this.Text = "DES";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            this.ResumeLayout(false); //Возобновляет обычную логику макета, без выполнения отложенных запросов макета
+            this.PerformLayout(); //принудительное применение логики макета ко всем его дочерним элементам управления
 
         }
 
@@ -207,7 +207,7 @@ namespace DesApp
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox Source;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox openOrClose;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label bErr;
